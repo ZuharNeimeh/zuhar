@@ -1,0 +1,19 @@
+while task.wait(0.08) do
+    local net = require(game.ReplicatedStorage.Modules.Net)
+    local rh = net:RemoteEvent("RegisterHit", true)
+    local ra = net:RemoteEvent("RegisterAttack", true)
+
+    local valenemies = {}
+
+    for _, v in ipairs(workspace.Enemies:GetChildren()) do
+        if v:FindFirstChild("Head") then
+            table.insert(valenemies, v)
+        end
+    end
+    local others = {}
+    for i = 2, #valenemies do
+        table.insert(others, {valenemies[i], valenemies[i].Head})
+    end
+    ra:FireServer(0.08)
+    rh:FireServer(valenemies[1].Head, others, nil, "o32ksh")
+end
