@@ -1,0 +1,172 @@
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local lp = Players.LocalPlayer
+
+-- ===== FUNCTIONS (unchanged) =====
+
+spawn(function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Noclip-5473"))() end)
+
+local function suck(plr)
+    local c = lp.Character
+    local h = c.Humanoid
+    local r = c.HumanoidRootPart
+    local t = plr.Character.HumanoidRootPart
+
+    h.Sit = true
+    local m = 0
+    local d = false
+
+    while h.Sit do
+        r.CFrame = (t.CFrame * CFrame.Angles(0, math.rad(180), 0))
+            + Vector3.new(0, 1.5, 0)
+            + t.CFrame.LookVector * m
+        if m >= 3 then d = true end
+        if m <= 0.5 then d = false end
+        m += d and -0.25 or 0.25
+        task.wait()
+    end
+end
+
+local function fuck(plr)
+    local c = lp.Character
+    local h = c.Humanoid
+    local r = c.HumanoidRootPart
+    local t = plr.Character.HumanoidRootPart
+
+    h.Sit = true
+    local m = 0
+    local d = false
+
+    while h.Sit do
+        r.CFrame = t.CFrame + Vector3.new(0, -0.5, 0) + t.CFrame.LookVector * -m
+        if m >= 3 then d = true end
+        if m <= 0.5 then d = false end
+        m += d and -0.25 or 0.25
+        task.wait()
+    end
+end
+
+local function dih()
+    game.TextChatService.TextChannels.RBXGeneral:SendAsync("-rs")
+    task.wait(2)
+    game.TextChatService.TextChannels.RBXGeneral:SendAsync("-ch")
+    task.wait(2)
+    game.TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 3438342658 4094878701 3662265036 3992084515 4047554959")
+    task.wait(2)
+    game.TextChatService.TextChannels.RBXGeneral:SendAsync("-net")
+
+    local offsets = {
+        Vector3.new(0, -2.3, -1),
+        Vector3.new(0, -2.3, -2),
+        Vector3.new(0, -2.3, -3),
+        Vector3.new(-1, -2.6, -1),
+        Vector3.new(1, -2.6, -1),
+    }
+
+    for _, v in ipairs(lp.Character:GetChildren()) do
+        if v:IsA("Accessory") then
+            local bv = Instance.new("BodyVelocity", v.Handle)
+            bv.MaxForce = Vector3.new(1e15,1e15,1e15)
+            bv.Velocity = Vector3.zero
+            local m = v.Handle:FindFirstChildOfClass("SpecialMesh")
+            if m then m:Destroy() end
+            local w = v.Handle:FindFirstChildOfClass("Weld")
+            if w then w:Destroy() end
+            v.Handle.CanCollide = false
+        end
+    end
+
+    local stop = false
+    lp.CharacterAdded:Once(function() stop = true end)
+
+    repeat
+        local n = 0
+        for _, v in ipairs(lp.Character:GetChildren()) do
+            if v:IsA("Accessory") then
+                n += 1
+                local o = offsets[n]
+                v.Handle.CFrame =
+                    lp.Character.PrimaryPart.CFrame *
+                    CFrame.new(-o.X, o.Y, o.Z)
+                v.Handle.CanCollide = false
+            end
+        end
+        game:GetService("RunService").RenderStepped:Wait()
+    until stop
+end
+
+-- ===== UI =====
+
+local gui = Instance.new("ScreenGui", lp.PlayerGui)
+gui.ResetOnSpawn = false
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.fromScale(0.28, 0.36)
+frame.Position = UDim2.fromScale(0.36, 0.32)
+frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
+Instance.new("UICorner", frame)
+
+local layout = Instance.new("UIListLayout", frame)
+layout.Padding = UDim.new(0, 8)
+layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+local pad = Instance.new("UIPadding", frame)
+pad.PaddingTop = UDim.new(0, 10)
+
+local function drag(f)
+    local d, sP, sI
+    f.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then
+            d = true
+            sP = f.Position
+            sI = i.Position
+            i.Changed:Once(function() d = false end)
+        end
+    end)
+    UIS.InputChanged:Connect(function(i)
+        if d and i.UserInputType == Enum.UserInputType.MouseMovement then
+            local dx = i.Position - sI
+            f.Position = UDim2.new(sP.X.Scale, sP.X.Offset+dx.X, sP.Y.Scale, sP.Y.Offset+dx.Y)
+        end
+    end)
+end
+drag(frame)
+
+local function button(txt, cb)
+    local b = Instance.new("TextButton", frame)
+    b.Size = UDim2.fromScale(0.9, 0.14)
+    b.Text = txt
+    b.TextScaled = true
+    b.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    b.TextColor3 = Color3.new(1,1,1)
+    Instance.new("UICorner", b)
+    b.MouseButton1Click:Connect(cb)
+end
+
+local function textbox(ph)
+    local t = Instance.new("TextBox", frame)
+    t.Size = UDim2.fromScale(0.9, 0.12)
+    t.PlaceholderText = ph
+    t.Text = ""
+    t.TextScaled = true
+    t.BackgroundColor3 = Color3.fromRGB(35,35,35)
+    t.TextColor3 = Color3.new(1,1,1)
+    Instance.new("UICorner", t)
+    return t
+end
+
+local nameBox = textbox("player name")
+
+button("dih", function()
+    spawn(function() dih() end)
+end)
+
+button("get suck", function()
+    local p = Players:FindFirstChild(nameBox.Text)
+    if p then spawn(function() suck(p) end) end
+end)
+
+button("fuck playre", function()
+    local p = Players:FindFirstChild(nameBox.Text)
+    if p then spawn(function() fuck(p) end) end
+end)
